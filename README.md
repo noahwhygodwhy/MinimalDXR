@@ -6,4 +6,4 @@ The rules I followed:
 
 There is more that could be done, ie void pointer shenanigans, to save lines but I felt this was a good point between (un)readability and fewer lines.
 
-BE CAREFUL running this. You can't move the window, and it doesn't respect the "X" button to close. You have to either close it via terminating in visual studio or task manager.
+BE CAREFUL running this. You can't move the window, and it doesn't respect the "X" button to close. You have to either close it via terminating in visual studio or task manager. I say this as it does have memory leaks and will eat up ram slowly but surely. (not vram at least, i think)
