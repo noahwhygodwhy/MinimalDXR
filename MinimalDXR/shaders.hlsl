@@ -40,7 +40,7 @@ void RayGeneration()
     ray.Origin = camera;
     ray.Direction = normalize(target - camera);
     ray.TMin = 0.001;
-    ray.TMax = 100;
+    ray.TMax = 1000;
 
     Payload payload;
     payload.layer = 0;
@@ -69,11 +69,11 @@ void RefractHit(inout Payload payload, in float3 normal)
     ray.Origin = pos - (normal * 0.0001);
     ray.Direction = refracted;
     ray.TMin = 0.001;
-    ray.TMax = 100;
+    ray.TMax = 1000;
     TraceRay(scene, RAY_FLAG_NONE, 0xFF, 0, 0, 0, ray, payload);
 }
 
-void MirrorHit(inout Payload payload, in float3 normal)
+void ReflectHit(inout Payload payload, in float3 normal)
 {
     float3 pos = WorldRayOrigin() + WorldRayDirection() * RayTCurrent();
     
@@ -83,9 +83,9 @@ void MirrorHit(inout Payload payload, in float3 normal)
     mirrorRay.Origin = pos + (normal * 0.0001);
     mirrorRay.Direction = reflected;
     mirrorRay.TMin = 0.001;
-    mirrorRay.TMax = 100;
+    mirrorRay.TMax = 1000;
     
-    //TraceRay(scene, RAY_FLAG_NONE, 0xFF, 0, 0, 0, mirrorRay, payload);
+    TraceRay(scene, RAY_FLAG_NONE, 0xFF, 0, 0, 0, mirrorRay, payload);
 }
 
 
@@ -95,13 +95,17 @@ void ClosestHit(inout Payload payload, in BuiltInTriangleIntersectionAttributes 
     payload.layer++;
     Tringle tri = geomdata[PrimitiveIndex()];
     //float3 pos = WorldRayOrigin() + WorldRayDirection() * RayTCurrent();
-    float3 normal = tri.verts[0].norm;//    (normalize(mul(float3(0, 1, 0), (float3x3) ObjectToWorld4x3())));
+    float3 ab = tri.verts[1].pos - tri.verts[0].pos;
+    float3 ac = tri.verts[2].pos - tri.verts[0].pos;
+    float3 normal = normalize(cross(ab, ac));
+    
+    //float3 normal = tri.verts[0].norm;//    (normalize(mul(float3(0, 1, 0), (float3x3) ObjectToWorld4x3())));
     
     float3 color = abs(normal);
     payload.color = float16_t3(color.x, color.y, color.z);
     return;
-    /*
-    if(payload.layer > 3)
+    
+    /*if(payload.layer > 20)
     {
         payload.color = float16_t3(1.0, 0.0, 0.0);
         return;
@@ -109,7 +113,8 @@ void ClosestHit(inout Payload payload, in BuiltInTriangleIntersectionAttributes 
     //return;
     switch (InstanceID())
     {
-        case 0: RefractHit(payload, normal); break;
+        case 2: ReflectHit(payload, normal); break;
         default: payload.color = float16_t3(color.x, color.y, color.z); break;
     }*/
 }
+    
