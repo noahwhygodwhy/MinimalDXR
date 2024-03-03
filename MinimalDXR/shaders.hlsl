@@ -7,13 +7,6 @@ struct Payload
     uint16_t layer;
 };
 
-/*float4 frag(v2f IN, uint primID : SV_PrimitiveID) : SV_Target
-{
-// Crappy "random"
-    float randPerPrim = frac((float) primID * 113.171);
-    return randPerPrim;
-}*/
-
 struct Vert
 {
     float3 pos;
@@ -107,7 +100,7 @@ void ClosestHit(inout Payload payload, in BuiltInTriangleIntersectionAttributes 
     float3 color = abs(normal);
     payload.color = float16_t3(color.x, color.y, color.z);
     return;
-    
+    /*
     if(payload.layer > 3)
     {
         payload.color = float16_t3(1.0, 0.0, 0.0);
@@ -118,5 +111,5 @@ void ClosestHit(inout Payload payload, in BuiltInTriangleIntersectionAttributes 
     {
         case 0: RefractHit(payload, normal); break;
         default: payload.color = float16_t3(color.x, color.y, color.z); break;
-    }
+    }*/
 }

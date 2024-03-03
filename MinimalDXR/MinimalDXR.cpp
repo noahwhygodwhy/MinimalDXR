@@ -106,9 +106,9 @@ _Use_decl_annotations_ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPTST
 		commandList->SetComputeRootSignature(rootSignature);
 		commandList->SetDescriptorHeaps(1, &uavHeap);
 		D3D12_GPU_DESCRIPTOR_HANDLE uavTable = uavHeap->GetGPUDescriptorHandleForHeapStart();
-		commandList->SetComputeRootDescriptorTable(0, uavTable); // <-u0 v t0
-		commandList->SetComputeRootShaderResourceView(1, tlasBuffer->GetGPUVirtualAddress());
-		commandList->SetComputeRootShaderResourceView(2, monkeyVertexBuffer->GetGPUVirtualAddress());
+		commandList->SetComputeRootDescriptorTable(0, uavTable); // u0 
+		commandList->SetComputeRootShaderResourceView(1, tlasBuffer->GetGPUVirtualAddress()); // t0
+		commandList->SetComputeRootShaderResourceView(2, monkeyVertexBuffer->GetGPUVirtualAddress()); //t1 
 		commandList->DispatchRays(new D3D12_DISPATCH_RAYS_DESC{ .RayGenerationShaderRecord = {.StartAddress = shaderIDsBuffer->GetGPUVirtualAddress(),.SizeInBytes = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES},.MissShaderTable = {.StartAddress = shaderIDsBuffer->GetGPUVirtualAddress() + D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT,.SizeInBytes = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES},.HitGroupTable = {.StartAddress = shaderIDsBuffer->GetGPUVirtualAddress() + 2 * D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT,.SizeInBytes = D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES},.Width = 800,.Height = 800,.Depth = 1 });
 		swapChain->GetBuffer(frameIndex, IID_PPV_ARGS(&backBuffer));
 		D3D12_RESOURCE_BARRIER barriers[] = { D3D12_RESOURCE_BARRIER{.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION, .Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE, .Transition = {.pResource = renderTarget, .StateBefore = D3D12_RESOURCE_STATE_COMMON, .StateAfter = D3D12_RESOURCE_STATE_COPY_SOURCE} }, D3D12_RESOURCE_BARRIER{.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION, .Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE, .Transition = {.pResource = backBuffer, .StateBefore = D3D12_RESOURCE_STATE_PRESENT, .StateAfter = D3D12_RESOURCE_STATE_COPY_DEST} }, D3D12_RESOURCE_BARRIER{.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION, .Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE, .Transition = {.pResource = renderTarget, .StateBefore = D3D12_RESOURCE_STATE_COPY_SOURCE, .StateAfter = D3D12_RESOURCE_STATE_COMMON} }, D3D12_RESOURCE_BARRIER{.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION, .Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE, .Transition = {.pResource = backBuffer, .StateBefore = D3D12_RESOURCE_STATE_COPY_DEST, .StateAfter = D3D12_RESOURCE_STATE_PRESENT} }};
