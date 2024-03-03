@@ -30,8 +30,6 @@ void Flush() {
 	fence->SetEventOnCompletion(value++, nullptr);
 }
 _Use_decl_annotations_ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int nCmdShow) {
-	glm::mat4 x = glm::rotate(glm::mat4(1), glm::radians(45.0f), glm::fvec3(1, 1, 0));
-	OutputDebugStringA(std::format("{}", glm::to_string(x).c_str()).data());
 	hwnd = CreateWindow((LPWSTR) RegisterClassEx(new WNDCLASSEX{ sizeof(WNDCLASSEX), CS_HREDRAW | CS_VREDRAW, [](HWND hWndin, UINT msg, WPARAM wParam, LPARAM lParam) {return DefWindowProc(hWndin, msg, wParam, lParam); }, 0, 0, hInstance, NULL, LoadCursor(NULL, IDC_ARROW), NULL, L"", L"MyWindowClass" }), L"", WS_OVERLAPPEDWINDOW, 0, 0, 800, 800, NULL, NULL, hInstance, NULL);
 	CreateDXGIFactory2(0, IID_PPV_ARGS(&factory4));
 	HRESULT hre = D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&device));
