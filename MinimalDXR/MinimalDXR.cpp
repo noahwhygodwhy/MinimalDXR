@@ -18,7 +18,7 @@ void Flush() {
 	commandQueue->Signal(fence, value);
 	fence->SetEventOnCompletion(value++, nullptr);}
 _Use_decl_annotations_ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int nCmdShow) {
-	hwnd = CreateWindow((LPWSTR) RegisterClassEx(new WNDCLASSEX{ sizeof(WNDCLASSEX), CS_HREDRAW | CS_VREDRAW, [](HWND hWndin, UINT msg, WPARAM wParam, LPARAM lParam) {return DefWindowProc(hWndin, msg, wParam, lParam); }, 0, 0, hInstance, NULL, LoadCursor(NULL, IDC_ARROW), NULL, L"", L"MyWindowClass" }), L"", WS_OVERLAPPEDWINDOW, 0, 0, 800, 800, NULL, NULL, hInstance, NULL);
+	hwnd = CreateWindow((LPWSTR) RegisterClassEx(new WNDCLASSEX{ sizeof(WNDCLASSEX), CS_HREDRAW | CS_VREDRAW, [](HWND hWndin, UINT msg, WPARAM wParam, LPARAM lParam) {return DefWindowProc(hWndin, msg, wParam, lParam); }, 0, 0, hInstance, NULL, LoadCursor(NULL, IDC_ARROW), NULL, L"", L"MyWindowClass" }), L"", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0, 0, 800, 800, NULL, NULL, hInstance, NULL);
 	CreateDXGIFactory2(0, IID_PPV_ARGS(&factory4));
 	HRESULT hre = D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&device));
 	factory4->QueryInterface(IID_PPV_ARGS(&factory6)); //extra line, but saves more during adapter enumeration
@@ -63,9 +63,8 @@ _Use_decl_annotations_ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPTST
 	memcpy(static_cast<char*>(uploadPointers[3]) + (D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT * 0), stateprops->GetShaderIdentifier(L"RayGeneration"), D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES);
 	memcpy(static_cast<char*>(uploadPointers[3]) + (D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT * 1), stateprops->GetShaderIdentifier(L"Miss"), D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES);
 	memcpy(static_cast<char*>(uploadPointers[3]) + (D3D12_RAYTRACING_SHADER_TABLE_BYTE_ALIGNMENT * 2), stateprops->GetShaderIdentifier(L"HitGroup"), D3D12_SHADER_IDENTIFIER_SIZE_IN_BYTES);
-	ShowWindow(hwnd, nCmdShow);
 	commandList->Close();
-	for (uint32_t frameIndex = 0; frameIndex < 5; frameIndex = (frameIndex + 1)%2)	{
+	for (uint32_t frameIndex = 0; frameIndex < 5; frameIndex = (frameIndex + 1)%2) {
 		PeekMessageW(NULL, NULL, 0, 0, PM_REMOVE);
 		commandAllocator->Reset();
 		commandList->Reset(commandAllocator, nullptr);
