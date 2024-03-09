@@ -10,7 +10,6 @@ struct Payload
 struct Vert
 {
     float3 pos;
-    float3 norm;
 };
 struct Tringle
 {
@@ -92,12 +91,17 @@ void ReflectHit(inout Payload payload, in float3 normal)
 [shader("closesthit")]
 void ClosestHit(inout Payload payload, in BuiltInTriangleIntersectionAttributes attrib)
 {
+
     payload.layer++;
     Tringle tri = geomdata[PrimitiveIndex()];
     //float3 pos = WorldRayOrigin() + WorldRayDirection() * RayTCurrent();
     float3 ab = tri.verts[1].pos - tri.verts[0].pos;
     float3 ac = tri.verts[2].pos - tri.verts[0].pos;
     float3 normal = normalize(cross(ab, ac));
+    normal = mul(normal, ((float3x3) ObjectToWorld4x3()));
+//    float4 tempNormal = float4(normal.x, normal.y, normal.z, 1.0);
+//    tempNormal = ObjectToWorld4x3() * tempNormal;
+    
     
     //float3 normal = tri.verts[0].norm;//    (normalize(mul(float3(0, 1, 0), (float3x3) ObjectToWorld4x3())));
     
